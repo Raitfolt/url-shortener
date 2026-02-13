@@ -4,6 +4,9 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
+
 	"github.com/Raitfolt/url-shortener/internal/config"
 	"github.com/Raitfolt/url-shortener/internal/lib/logger/sl"
 	"github.com/Raitfolt/url-shortener/internal/storage/sqlite"
@@ -29,6 +32,13 @@ func main() {
 		log.Error("failed to initialize storage", sl.Err(err))
 	}
 	_ = storage
+
+	router := chi.NewRouter()
+
+	router.Use(middleware.RequestID) // Добавляет request_id в каждый запрос, для трейсинга
+	router.Use(middleware.Logger)    // Логирование всех запросов
+	router.Use(middleware.Recoverer) // Если где-то внутри сервера (обработчика запроса) произойдет паника, приложение не должно упасть
+	router.Use(middleware.URLFormat) // Парсер URLов поступающих запросов
 }
 
 func setupLogger(env string) *slog.Logger {
