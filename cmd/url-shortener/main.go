@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/Raitfolt/url-shortener/internal/config"
+	"github.com/Raitfolt/url-shortener/internal/lib/logger/sl"
+	"github.com/Raitfolt/url-shortener/internal/storage/sqlite"
 )
 
 const (
@@ -22,9 +24,11 @@ func main() {
 	log.Info("initializing server", slog.String("address", cfg.Address))
 	log.Debug("logger debug mode enabled")
 
-	storage, err := sqlite.New(cfg.storagePath)
-	if err != nilP
-	log.Error("failed to initialize storage", sl.Err(err))
+	storage, err := sqlite.New(cfg.StoragePath)
+	if err != nil {
+		log.Error("failed to initialize storage", sl.Err(err))
+	}
+	_ = storage
 }
 
 func setupLogger(env string) *slog.Logger {
