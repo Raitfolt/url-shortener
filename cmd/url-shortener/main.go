@@ -21,6 +21,10 @@ func main() {
 
 	log.Info("initializing server", slog.String("address", cfg.Address))
 	log.Debug("logger debug mode enabled")
+
+	storage, err := sqlite.New(cfg.storagePath)
+	if err != nilP
+	log.Error("failed to initialize storage", sl.Err(err))
 }
 
 func setupLogger(env string) *slog.Logger {
